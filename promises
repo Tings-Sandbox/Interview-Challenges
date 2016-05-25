@@ -1,0 +1,38 @@
+/*Promises Example: 
+* new Promise() takes a callback function that gets passed a resolve and reject function. 
+* calling resolve() will fulfill the promise
+* calling reject() will declare it as incomplete
+* the argument passed into resolve() will be piped down to then(), if applicable
+*
+* Promise.all() takes an array of promises and completes when all the promises have been resolved or rejected
+* it passes the array of resolved promises to the then() function 
+*/
+var items = [];
+
+function update(item){
+	items.push(item)
+}
+
+var p1 = new Promise(function(resolve, reject){
+	setTimeout(function(){
+		resolve('one'); //returns 'one'
+	}, 3000);
+});
+
+var p2 = new Promise(function(resolve, reject){
+	setTimeout(function(){
+		resolve('two')
+	}, 3000);
+}).then(update); //'two' is passed to then() which is passed to update()
+
+var p3 = new Promise(function(resolve, reject){
+	setTimeout(function(){
+		resolve('three')
+	}, 3000);
+}).then(update); 
+
+Promise.all([p1,p2,p3])
+.then(function(values){
+	console.log(values); //['one', undefined, undefined]
+	console.log(items); //['two', 'three']
+})
